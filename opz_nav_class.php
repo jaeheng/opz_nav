@@ -42,6 +42,19 @@ class OpzNavClass {
         echo '<label for="opz_url">链接地址：<small class="text-muted">（用于链接类型分类文章）</small></label>';
         echo "<input type='text' name='opz_url' id='opz_url' class='form-control' value='{$opz_url}' placeholder='http(s)://'>";
         echo '</div>';
+
+        # 临时：清洗数据
+//        $sql = "select gid, link from " . DB_PREFIX . 'blog where link != ""';
+//
+//        $res = $this->_db->query($sql);
+//        $data = [];
+//        $prefix = DB_PREFIX;
+//        while ($row = $res->fetch_assoc()) {
+//            $data = serialize(['opz_url' => $row['link']]);
+//            $sql = "INSERT INTO `{$prefix}opz_nav` (`gid`, `value`) VALUES ({$row['gid']}, '{$data}')";
+//            $this->_db->query($sql);
+//        }
+//        var_dump($data[0]);
     }
 
     public function set_data($id, $data) {
@@ -49,9 +62,10 @@ class OpzNavClass {
         $res = $this->_db->query($sql);
         $prefix = DB_PREFIX;
         $data = serialize($data);
+
         if ($res->fetch_array()) {
             // 有则更新
-            $sql = "UPDATE `{$prefix}opz_nav` SET `value` = '{$data}' WHERE `id` = {$id}";
+            $sql = "UPDATE `{$prefix}opz_nav` SET `value` = '{$data}' WHERE `gid` = {$id}";
         } else {
             // 无则新增
             $sql = "INSERT INTO `{$prefix}opz_nav` (`gid`, `value`) VALUES ({$id}, '{$data}')";
