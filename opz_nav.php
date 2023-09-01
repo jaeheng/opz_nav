@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: emlog导航站模版配套插件
-Version: 0.0.1
+Version: 0.1.0
 Plugin URL:https://www.emlog.net/template/detail/1107
 Description: emlog导航站模版配套插件，可在模版介绍页面查看
 Author: 子恒博客<phpat@qq.com>
@@ -27,14 +27,10 @@ function _opz($id = null) {
     if ($id !== null) {
         return OpzNavClass::getInstance()->get_data($id);
     } else {
-        return 'none';
+        return false;
     }
 }
 
 function _opz_url($id = null) {
-    if ($id !== null) {
-        return OpzNavClass::getInstance()->get_data($id)['opz_url'];
-    } else {
-        return 'none';
-    }
+    return _opz($id)['opz_url'];
 }
