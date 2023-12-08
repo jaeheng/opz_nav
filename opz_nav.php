@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: AI资源网址导航模版配套插件
-Version: 0.2.1
+Version: 0.2.2
 Plugin URL:https://www.emlog.net/plugin/detail/614
 Description: AI资源网址导航模版配套插件，可在模版介绍页面查看
 Author: 子恒博客
