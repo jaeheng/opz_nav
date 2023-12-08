@@ -31,16 +31,21 @@ class OpzNavClass {
     public function add_article_field () {
         $id = Input::getIntVar('gid');
         $opz_data = $this->get_data($id);
-        $opz_url = $opz_data['opz_url'];
-        echo '<h3 style="font-size: 14px;
-    color: #2196F3;
-    text-align: center;
+        $opz_url = $opz_data['opz_url'] ?: 'https://blog.phpat.com';
+        $plugin_url = BLOG_URL . 'content/plugins/opz_nav/';
+        // http://localhost:3000/admin/plugin.php?plugin=em_stats
+        echo '<script src="'.$plugin_url.'opz_nav.js"></script>';
+        echo '<div style="font-size: 14px;
     margin: 2em 0;
     border: 1px dashed;
-    padding: 10px;">👇emlog导航站模版专有属性👇</h3>';
+    border-radius: 6px;
+    padding: 10px;">';
+        echo '<p style="text-align: center;color: #2196F3;line-height: 3;">----导航站模版专有属性----</p>';
         echo '<div class="form-group">';
-        echo '<label for="opz_url">链接地址：<small class="text-muted">（用于链接类型分类文章）</small></label>';
+        echo '<div style="display: flex;justify-content: space-between">
+<label for="opz_url">链接地址：<small class="text-muted">（用于链接型文章）</small></label> <span class="text-primary" style="cursor: pointer" id="get-link-info-btn">获取标题/ico</span></div>';
         echo "<input type='text' name='opz_url' id='opz_url' class='form-control' value='{$opz_url}' placeholder='http(s)://'>";
+        echo '</div>';
         echo '</div>';
 
         # 临时：清洗数据
