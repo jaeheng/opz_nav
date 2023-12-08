@@ -142,7 +142,6 @@ if ($plugin === 'opz_nav' && !empty($api)) {
 }
 function plugin_setting_view () {
     $url = BLOG_URL . 'admin/article.php?action=write';
-    echo '<p>无更多设置内容, 开启插件即可</p>';
-    echo '<p>开启后，发布文章的右侧会有填写链接地址的文本框</p>';
-    echo '<p><a href="'.$url.'">去看看</a></p>';
+    echo '<h3>AI资源网址导航模版配套插件设置</h3>';
+    echo '<div class="card mt-3"><div class="card-header">插件说明</div><div class="card-body">开启插件后，发布文章的右侧会有填写链接地址的文本框 <a href="'.$url.'">去看看</a></div></div>';
 }
