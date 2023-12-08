@@ -31,9 +31,8 @@ class OpzNavClass {
     public function add_article_field () {
         $id = Input::getIntVar('gid');
         $opz_data = $this->get_data($id);
-        $opz_url = $opz_data['opz_url'] ?: 'https://blog.phpat.com';
+        $opz_url = $opz_data['opz_url'];
         $plugin_url = BLOG_URL . 'content/plugins/opz_nav/';
-        // http://localhost:3000/admin/plugin.php?plugin=em_stats
         echo '<script src="'.$plugin_url.'opz_nav.js"></script>';
         echo '<div style="font-size: 14px;
     margin: 2em 0;

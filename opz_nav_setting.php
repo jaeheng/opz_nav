@@ -141,4 +141,8 @@ if ($plugin === 'opz_nav' && !empty($api)) {
     die();
 }
 function plugin_setting_view () {
+    $url = BLOG_URL . 'admin/article.php?action=write';
+    echo '<p>无更多设置内容, 开启插件即可</p>';
+    echo '<p>开启后，发布文章的右侧会有填写链接地址的文本框</p>';
+    echo '<p><a href="'.$url.'">去看看</a></p>';
 }

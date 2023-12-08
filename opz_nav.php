@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: emlog导航站模版配套插件
-Version: 0.1.0
-Plugin URL:https://www.emlog.net/template/detail/1107
-Description: emlog导航站模版配套插件，可在模版介绍页面查看
-Author: 子恒博客<phpat@qq.com>
-Author URL: https://blog.phpat.com
+Plugin Name: AI资源网址导航模版配套插件
+Version: 0.2.1
+Plugin URL:https://www.emlog.net/plugin/detail/614
+Description: AI资源网址导航模版配套插件，可在模版介绍页面查看
+Author: 子恒博客
+Author URL: https://www.emlog.net/author/index/74
 */
 
 !defined('EMLOG_ROOT') && exit('Access Denied!');
@@ -13,7 +13,6 @@ Author URL: https://blog.phpat.com
 if (!class_exists('OpzNavClass', false)) {
     include __DIR__ . '/opz_nav_class.php';
 }
-
 
 addAction('adm_writelog_side', function () {
     OpzNavClass::getInstance()->add_article_field();
