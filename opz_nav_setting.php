@@ -142,6 +142,25 @@ if ($plugin === 'opz_nav' && !empty($api)) {
 }
 function plugin_setting_view () {
     $url = BLOG_URL . 'admin/article.php?action=write';
-    echo '<h3>AI资源网址导航模版配套插件设置</h3>';
-    echo '<div class="card mt-3"><div class="card-header">插件说明</div><div class="card-body">开启插件后，发布文章的右侧会有填写链接地址的文本框 <a href="'.$url.'">去看看</a></div></div>';
+    echo '<h3>网址导航插件说明</h3>';
+    echo '<div class="card mt-3"><div class="card-header">插件说明</div><div class="card-body">
+        开启插件后，发布文章的右侧会有填写链接地址的文本框 <a href="'.$url.'">去看看</a>
+        <p class="mt-3">点击量只有通过 <span class="text-danger">过渡页面</span> 跳转才会统计</p>
+        <p><span class="text-danger">过渡页面获取</span>: <pre style="padding: 10px;background: #eee;"><code>$url = BLOG_URL . \'?plugin=opz_nav&url=\' . base64_encode(_opz_url($gid));</code></pre></p>
+        </div></div>';
+    echo '<div class="card mt-3"><div class="card-header">插件使用文档</div><div class="card-body">
+        <p>1. 模版中可使用<code style="padding: 5px 10px;margin: 0 10px;background: #eee;">_opz($logid)</code>来获取文章对应的链接数据(地址和点击量)</p>
+        <p>2. 模版中可使用<code style="padding: 5px 10px;margin: 0 10px;background: #eee;">_opz_url($logid)</code>来获取文章对应的链接地址</p>
+        <p>3. 模版中可使用<code style="padding: 5px 10px;margin: 0 10px;background: #eee;">_opz_views($logid)</code>来获取文章对应链接的点击量</p>
+    </div></div>';
+
+    ?>
+    <script>
+        // emlog相关
+        setTimeout(hideActived, 3600);
+        $("#menu_category_ext").addClass('active');
+        $("#menu_ext").addClass('show');
+        $("#opz_nav").addClass('active');
+    </script>
+<?php
 }

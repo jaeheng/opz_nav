@@ -32,6 +32,7 @@ class OpzNavClass {
         $id = Input::getIntVar('gid');
         $opz_data = $this->get_data($id);
         $opz_url = $opz_data['opz_url'];
+        $views = $opz_data['views'];
         $plugin_url = BLOG_URL . 'content/plugins/opz_nav/';
         echo '<script src="'.$plugin_url.'opz_nav.js"></script>';
         echo '<div style="font-size: 14px;
@@ -39,26 +40,14 @@ class OpzNavClass {
     border: 1px dashed;
     border-radius: 6px;
     padding: 10px;">';
-        echo '<p style="text-align: center;color: #2196F3;line-height: 3;">----导航站模版专有属性----</p>';
+        echo '<p style="text-align: center;color: #2196F3;line-height: 3;">----网址导航插件----</p>';
         echo '<div class="form-group">';
         echo '<div style="display: flex;justify-content: space-between">
 <label for="opz_url">链接地址：<small class="text-muted">（用于链接型文章）</small></label> <span class="text-primary" style="cursor: pointer" id="get-link-info-btn">获取标题/ico</span></div>';
         echo "<input type='text' name='opz_url' id='opz_url' class='form-control' value='{$opz_url}' placeholder='http(s)://'>";
+        echo "<p style='font-size: 12px;margin-top: 5px;'>访问次数: {$views}</p>";
         echo '</div>';
         echo '</div>';
-
-        # 临时：清洗数据
-//        $sql = "select gid, link from " . DB_PREFIX . 'blog where link != ""';
-//
-//        $res = $this->_db->query($sql);
-//        $data = [];
-//        $prefix = DB_PREFIX;
-//        while ($row = $res->fetch_assoc()) {
-//            $data = serialize(['opz_url' => $row['link']]);
-//            $sql = "INSERT INTO `{$prefix}opz_nav` (`gid`, `value`) VALUES ({$row['gid']}, '{$data}')";
-//            $this->_db->query($sql);
-//        }
-//        var_dump($data[0]);
     }
 
     public function set_data($id, $data) {
@@ -81,18 +70,64 @@ class OpzNavClass {
         $sql = "select * from " . DB_PREFIX . "opz_nav where gid = {$id}";
         $res = $this->_db->query($sql);
         if ($data = $res->fetch_assoc()) {
-            return unserialize($data['value']);
+            $data = unserialize($data['value']);
+
+            if (!is_array($data)) {
+                return [
+                    'opz_url' => '',
+                    'views' => 0
+                ];
+            }
+
+            // 保证获取的数据里有opz_url和views字段
+            if (!isset($data['opz_url'])) {
+                $data['opz_url'] = '';
+            }
+            if (!isset($data['views'])) {
+                $data['views'] = 0;
+            }
+
+            return $data;
         } else {
             return [
-                'opz_url' => ''
+                'opz_url' => '',
+                'views' => 0
             ];
         }
     }
 
     public function save_article_field ($id) {
         $opz_url = Input::postStrVar('opz_url');
-        $this->set_data($id, [
-            'opz_url' => $opz_url
-        ]);
+        $sql = "select * from " . DB_PREFIX . "opz_nav where gid = {$id}";
+        $res = $this->_db->query($sql)->fetch_assoc();
+
+        if (!$res) {
+            $this->set_data($id, [
+                'opz_url' => $opz_url,
+                'views' => 0
+            ]);
+        } else {
+            $data = unserialize($res['value']);
+
+            $this->set_data($id, [
+                'opz_url' => $opz_url,
+                'views' => $data['opz_url'] === $opz_url ? $data['views'] : 0
+            ]);
+        }
+    }
+
+    public function increase_views($url) {
+        $sql = "select * from " . DB_PREFIX . "opz_nav where value like '%\"{$url}\"%'";
+
+        $res = $this->_db->query($sql)->fetch_assoc();
+
+        if ($res) {
+            $data = unserialize($res['value']);
+
+            $this->set_data($res['gid'], [
+                'opz_url' => $data['opz_url'],
+                'views' => $data['views']+1
+            ]);
+        }
     }
 }

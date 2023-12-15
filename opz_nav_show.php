@@ -11,8 +11,10 @@ $blogname = $options['blogname'];
 $icon = BLOG_URL . 'content/plugins/opz_nav/attention.svg';
 $url = Input::getStrVar('url') ? base64_decode(Input::getStrVar('url')): BLOG_URL;
 require_once View::getView('header');
-
 $second = _g('redirect_second');
+
+// 访问次数+1
+OpzNavClass::getInstance()->increase_views($url);
 ?>
 
     <style>
