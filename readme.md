@@ -20,9 +20,6 @@ if (!function_exists('get_link_url')) {
     // 获取跳转链接
     function get_link_url ($gid) {
         if (function_exists('_opz_url') && _opz_url($gid)) {
-            if(_g('transition_page') === 'y') {
-                return BLOG_URL . '?plugin=opz_nav&url=' . base64_encode(_opz_url($gid));
-            }
             return _opz_url($gid);
         }
         return BLOG_URL;

@@ -191,7 +191,7 @@ function plugin_setting_view () {
         <p>2. 模版中可使用<code style="padding: 5px 10px;margin: 0 10px;background: #eee;">_opz_url($logid)</code>来获取文章对应的链接地址</p>
         <p>3. 模版中可使用<code style="padding: 5px 10px;margin: 0 10px;background: #eee;">_opz_views($logid)</code>来获取文章对应链接的点击量</p>
         <p>4. 模版的options配置文件中使用<code style="padding: 5px 10px;margin: 0 10px;background: #eee;">redirect_second</code>配置过渡页面跳转倒计时</p>
-        <p>5. 模版的options配置文件中使用<code style="padding: 5px 10px;margin: 0 10px;background: #eee;">transition_page</code>配置是否直接跳转到目标站点</p>
+        <p>5. 模版的options配置文件中使用<code style="padding: 5px 10px;margin: 0 10px;background: #eee;">transition_page</code>配置是否直接跳转到过渡页面</p>
     </div></div>';
 
 
