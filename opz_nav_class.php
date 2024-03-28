@@ -130,4 +130,12 @@ class OpzNavClass {
             ]);
         }
     }
+
+    public function all_gid() {
+        $sql = "select gid from " . DB_PREFIX . "opz_nav";
+
+        $res = $this->_db->query($sql)->fetch_all();
+
+        return array_column($res, 0);
+    }
 }

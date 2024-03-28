@@ -10,11 +10,18 @@ $blogname = $options['blogname'];
 
 $icon = BLOG_URL . 'content/plugins/opz_nav/attention.svg';
 $url = Input::getStrVar('url') ? base64_decode(Input::getStrVar('url')): BLOG_URL;
-require_once View::getView('header');
 $second = _g('redirect_second');
+$transition_page = _g('transition_page');
 
 // 访问次数+1
 OpzNavClass::getInstance()->increase_views($url);
+
+// 直接跳转
+if ($transition_page === 'n') {
+    echo "<script>window.location.href = '$url';</script>";
+}
+
+require_once View::getView('header');
 ?>
 
     <style>
