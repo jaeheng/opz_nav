@@ -1,7 +1,8 @@
 <?php
 !defined('EMLOG_ROOT') && exit('Access Denied!');
 
-class OpzNavClass {
+class OpzNavClass
+{
 
     //插件标识
     const ID = 'opz_nav';
@@ -21,20 +22,22 @@ class OpzNavClass {
         return $this->_db;
     }
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (self::$_instance === null) {
             self::$_instance = new self();
         }
         return self::$_instance;
     }
 
-    public function add_article_field () {
+    public function add_article_field()
+    {
         $id = Input::getIntVar('gid');
         $opz_data = $this->get_data($id);
         $opz_url = $opz_data['opz_url'];
         $views = $opz_data['views'];
         $plugin_url = BLOG_URL . 'content/plugins/opz_nav/';
-        echo '<script src="'.$plugin_url.'opz_nav.js"></script>';
+        echo '<script src="' . $plugin_url . 'opz_nav.js"></script>';
         echo '<div style="font-size: 14px;
     margin: 2em 0;
     border: 1px dashed;
@@ -43,14 +46,16 @@ class OpzNavClass {
         echo '<p style="text-align: center;color: #2196F3;line-height: 3;">----网址导航插件----</p>';
         echo '<div class="form-group">';
         echo '<div style="display: flex;justify-content: space-between">
-<label for="opz_url">链接地址：<small class="text-muted">（用于链接型文章）</small></label> <span class="text-primary" style="cursor: pointer" id="get-link-info-btn">获取标题/ico</span></div>';
+<label for="opz_url">链接地址：<small class="text-muted">（用于链接型文章）</small></label></div>';
         echo "<input type='text' name='opz_url' id='opz_url' class='form-control' value='{$opz_url}' placeholder='http(s)://'>";
         echo "<p style='font-size: 12px;margin-top: 5px;'>访问次数: {$views}</p>";
+        echo "<p style='margin-top: 5px;display: flex;justify-content: space-between;'>" . '<span class="btn btn-primary" id="get-link-info-btn">获取标题/ico</span><span class="btn btn-google" id="get-link-image-btn">获取首页截图</span>' . "</p>";
         echo '</div>';
         echo '</div>';
     }
 
-    public function set_data($id, $data) {
+    public function set_data($id, $data)
+    {
         $sql = "select * from " . DB_PREFIX . "opz_nav where gid = {$id}";
         $res = $this->_db->query($sql);
         $prefix = DB_PREFIX;
@@ -66,7 +71,8 @@ class OpzNavClass {
         $this->_db->query($sql);
     }
 
-    public function get_data($id) {
+    public function get_data($id)
+    {
         $sql = "select * from " . DB_PREFIX . "opz_nav where gid = {$id}";
         $res = $this->_db->query($sql);
         if ($data = $res->fetch_assoc()) {
@@ -96,7 +102,8 @@ class OpzNavClass {
         }
     }
 
-    public function save_article_field ($id) {
+    public function save_article_field($id)
+    {
         $opz_url = Input::postStrVar('opz_url');
         $sql = "select * from " . DB_PREFIX . "opz_nav where gid = {$id}";
         $res = $this->_db->query($sql)->fetch_assoc();
@@ -116,7 +123,8 @@ class OpzNavClass {
         }
     }
 
-    public function increase_views($url) {
+    public function increase_views($url)
+    {
         $sql = "select * from " . DB_PREFIX . "opz_nav where value like '%\"{$url}\"%'";
 
         $res = $this->_db->query($sql)->fetch_assoc();
@@ -126,12 +134,13 @@ class OpzNavClass {
 
             $this->set_data($res['gid'], [
                 'opz_url' => $data['opz_url'],
-                'views' => $data['views']+1
+                'views' => $data['views'] + 1
             ]);
         }
     }
 
-    public function all_gid() {
+    public function all_gid()
+    {
         $sql = "select gid from " . DB_PREFIX . "opz_nav";
 
         $res = $this->_db->query($sql)->fetch_all();

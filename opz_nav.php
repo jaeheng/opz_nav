@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: 网址导航插件
-Version: 1.1.1
+Version: 1.2.1
 Plugin URL:https://www.emlog.net/plugin/detail/614
 Description: 提供录入网址、获取网址ico、跳转过渡页面等功能，具体可见商店介绍页面
 Author: 子恒博客
@@ -24,7 +24,7 @@ addAction('save_log', function ($id) {
 
 addAction('adm_menu_ext', function () {
 
-    echo '<a class="collapse-item" id="opz_nav" href="' .BLOG_URL.'/admin/plugin.php?plugin=opz_nav">网址导航插件</a>';
+    echo '<a class="collapse-item" id="opz_nav" href="' . BLOG_URL . '/admin/plugin.php?plugin=opz_nav">网址导航插件</a>';
 });
 
 /**
@@ -32,7 +32,8 @@ addAction('adm_menu_ext', function () {
  * @param $id
  * @return array
  */
-function _opz($id = null) {
+function _opz($id = null)
+{
     if ($id !== null) {
         return OpzNavClass::getInstance()->get_data($id);
     } else {
@@ -45,7 +46,8 @@ function _opz($id = null) {
  * @param $id
  * @return mixed
  */
-function _opz_url($id = null) {
+function _opz_url($id = null)
+{
 //    return _opz($id)['opz_url'];
     return BLOG_URL . '?plugin=opz_nav&url=' . base64_encode(_opz($id)['opz_url']);
 }
@@ -55,6 +57,7 @@ function _opz_url($id = null) {
  * @param $id
  * @return mixed
  */
-function _opz_views($id = null) {
+function _opz_views($id = null)
+{
     return _opz($id)['views'];
 }

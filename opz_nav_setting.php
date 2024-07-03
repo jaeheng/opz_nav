@@ -5,7 +5,8 @@ $api = Input::getStrVar('api');
 $plugin = Input::getStrVar('plugin');
 
 
-function getWebPageData($url) {
+function getWebPageData($url)
+{
     // 使用cURL获取页面内容
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -15,7 +16,8 @@ function getWebPageData($url) {
     return $html;
 }
 
-function getTitle($html) {
+function getTitle($html)
+{
     $dom = new DOMDocument;
     @$dom->loadHTML($html);
 
@@ -28,7 +30,8 @@ function getTitle($html) {
     }
 }
 
-function getFavicon($html, $url) {
+function getFavicon($html, $url)
+{
     $dom = new DOMDocument;
     @$dom->loadHTML($html);
 
@@ -58,12 +61,14 @@ function getFavicon($html, $url) {
     }
 }
 
-function checkFaviconExistence($faviconUrl) {
+function checkFaviconExistence($faviconUrl)
+{
     $headers = get_headers($faviconUrl);
     return stripos($headers[0], '200 OK') !== false;
 }
 
-function getFileExtension($url) {
+function getFileExtension($url)
+{
     // 使用pathinfo函数获取文件路径信息
     $pathInfo = pathinfo($url);
 
@@ -80,13 +85,28 @@ function getFileExtension($url) {
  * @param string $source file url
  * @return string Temporary file path
  */
-function opzDownFile($source) {
+function opzDownFile($source, $ext = null)
+{
     $content = file_get_contents($source);
     if ($content === false) {
         return '';
     }
 
-    $fileName = substr(md5($source), 0, 4) . time() . '.' . getFileExtension($source);
+    if (is_string($content)) {
+        try {
+            $resp = json_decode($content, true);
+            if ($resp['code'] == 400) {
+                die($content);
+            }
+        } catch (Exception $e) {
+        }
+    }
+
+    if (!$ext) {
+        $ext = getFileExtension($source);
+    }
+
+    $fileName = substr(md5($source), 0, 4) . time() . '.' . $ext;
 
     $dir_name = gmdate('Ym');
 
@@ -105,7 +125,10 @@ function opzDownFile($source) {
     return Option::UPLOADFILE_PATH . $dir_name . '/' . $fileName;
 }
 
-function get_link_info ($url) {
+function get_link_info($url)
+{
+    checkUrl($url);
+
     $html = getWebPageData($url);
 
     if ($html) {
@@ -133,7 +156,55 @@ function get_link_info ($url) {
     echo json_encode($data);
 }
 
-function isDeadLink($url, $timeout = 3) {
+function checkUrl($url)
+{
+    $words = ['&', '?', ' ', '#', '@', '!', '~', '$', '*', '(', ')', '+', '-', '\\'];
+
+    foreach ($words as $v) {
+        if (strpos($url, $v) !== false) {
+            $data = [
+                'code' => 400,
+                'data' => 'URL中不能存在' . $v
+            ];
+
+            die(json_encode($data));
+        }
+    }
+
+    if (isDeadLink($url, 5)) {
+        die(json_encode([
+            'code' => 400,
+            'data' => 'URL不可访问'
+        ]));
+    }
+}
+
+function get_link_image($url)
+{
+    checkUrl($url);
+    $api = "https://blog.phpat.com/plugin/screenshot?url=$url";
+
+    $temp_path = opzDownFile($api, 'png');
+
+    if ($temp_path) {
+        $data = [
+            'code' => 200,
+            'data' => [
+                'image' => BLOG_URL . mb_strcut($temp_path, 3)
+            ]
+        ];
+
+    } else {
+        $data = [
+            'code' => 400,
+            'data' => '获取失败'
+        ];
+    }
+    echo json_encode($data);
+}
+
+function isDeadLink($url, $timeout = 3)
+{
     // 创建流上下文设置超时为3秒
     $context = stream_context_create([
         'http' => [
@@ -150,12 +221,13 @@ function isDeadLink($url, $timeout = 3) {
         return true; // 否则链接无效
     }
 }
+
 function get_link_state($gid, $timeout)
 {
     $link = _opz($gid)['opz_url'];
 
     $data = [
-            'state' => !isDeadLink($link, $timeout),
+        'state' => !isDeadLink($link, $timeout),
         'link_url' => $link
     ];
     echo json_encode($data);
@@ -172,14 +244,20 @@ if ($plugin === 'opz_nav' && !empty($api)) {
         $timeout = Input::getStrVar('timeout', 3);
         get_link_state($gid, $timeout);
     }
+
+    if ($api === 'get_link_image') {
+        $url = Input::postStrVar('link');
+        get_link_image($url);
+    }
     die();
 }
-function plugin_setting_view () {
+function plugin_setting_view()
+{
     $url = BLOG_URL . 'admin/article.php?action=write';
     echo '<h3>网址导航插件说明</h3>';
     echo '<div class="card mt-3"><div class="card-header">插件说明</div><div class="card-body">
 
-        开启插件后，发布文章的右侧会有填写链接地址的文本框 <a href="'.$url.'">去看看</a>
+        开启插件后，发布文章的右侧会有填写链接地址的文本框 <a href="' . $url . '">去看看</a>
         <h4 style="margin-top: 1em;font-size: 18px;color: black;">插件功能</h4>
         <ul>
             <li>1. 给文章增加链接字段，并可统计链接的访问量</li>
@@ -202,7 +280,7 @@ function plugin_setting_view () {
 
     echo '<div class="card mt-3"><div class="card-header">死链查询</div><div class="card-body">
         <p>死链查询受限于服务器网络，无法访问的、被墙的、访问超时的链接都会判断为死链，可自行根据查询结果判断</p>
-        <p>共'.count($gids).'个链接<span id="num"></span></p>
+        <p>共' . count($gids) . '个链接<span id="num"></span></p>
         <p>超时设置: 秒<input type="text" class="form-control" id="timeout" value="3"></p>
         <button class="btn btn-primary" id="dead-link-btn">开始查询</button>
         
@@ -219,26 +297,27 @@ function plugin_setting_view () {
         $("#opz_nav").addClass('active');
         var deadLinks = []
 
-        function checkOneLink (gid, index, length) {
+        function checkOneLink(gid, index, length) {
             var timeout = $('#timeout').val();
             $.getJSON('<?= BLOG_URL;?>/admin/plugin.php?plugin=opz_nav&api=get_link_state&gid=' + gid + '&timeout=' + timeout, function (resp) {
                 console.log(resp)
                 if (!resp.state) {
-                    deadLinks.push("<p>文章ID: " +gid+"，链接: <a target='_blank' href='" + resp.link_url+"'>" + resp.link_url + "</a></p>")
+                    deadLinks.push("<p>文章ID: " + gid + "，链接: <a target='_blank' href='" + resp.link_url + "'>" + resp.link_url + "</a></p>")
                 }
                 $('#num').text(', 正在查询..., 其中' + (index + 1) + "个查询完成")
                 if (index + 1 < length) {
-                    checkOneLink(gids[index+1], index+1, length)
+                    checkOneLink(gids[index + 1], index + 1, length)
                 } else {
                     $('#num').text(', ' + length + "个全部查询完成")
                 }
                 $('#dead-links').html(deadLinks.join(''))
             })
         }
+
         $('#dead-link-btn').on('click', function () {
             $(this).attr('disabled', true)
             checkOneLink(gids[0], 0, gids.length)
         })
     </script>
-<?php
+    <?php
 }
