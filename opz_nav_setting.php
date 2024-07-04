@@ -158,7 +158,7 @@ function get_link_info($url)
 
 function checkUrl($url)
 {
-    $words = ['&', '?', ' ', '#', '@', '!', '~', '$', '*', '(', ')', '+', '-', '\\'];
+    $words = ['&', '?', ' ', '#', '@', '!', '~', '$', '*', '(', ')', '+', '\\'];
 
     foreach ($words as $v) {
         if (strpos($url, $v) !== false) {
@@ -171,7 +171,7 @@ function checkUrl($url)
         }
     }
 
-    if (isDeadLink($url, 5)) {
+    if (isDeadLink($url, 10)) {
         die(json_encode([
             'code' => 400,
             'data' => 'URL不可访问'
