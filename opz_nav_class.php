@@ -49,7 +49,7 @@ class OpzNavClass
 <label for="opz_url">链接地址：<small class="text-muted">（用于链接型文章）</small></label></div>';
         echo "<input type='text' name='opz_url' id='opz_url' class='form-control' value='{$opz_url}' placeholder='http(s)://'>";
         echo "<p style='font-size: 12px;margin-top: 5px;'>访问次数: {$views}</p>";
-        echo "<p style='margin-top: 5px;display: flex;justify-content: space-between;'>" . '<span class="btn btn-primary" id="get-link-info-btn">获取标题/ico</span><span class="btn btn-google" id="get-link-image-btn">获取首页截图</span>' . "</p>";
+        echo "<p style='margin-top: 5px;display: flex;justify-content: space-between;'>" . '<span class="btn btn-primary" id="get-link-info-btn">获取标题/ico</span>' . "</p>";
         echo '</div>';
         echo '</div>';
     }

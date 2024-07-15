@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: 网址导航插件
-Version: 1.2.1
+Version: 1.2.2
 Plugin URL:https://www.emlog.net/plugin/detail/614
 Description: 提供录入网址、获取网址ico、跳转过渡页面等功能，具体可见商店介绍页面
 Author: 子恒博客
@@ -49,7 +49,7 @@ function _opz($id = null)
 function _opz_url($id = null)
 {
 //    return _opz($id)['opz_url'];
-    return BLOG_URL . '?plugin=opz_nav&url=' . base64_encode(_opz($id)['opz_url']);
+    return BLOG_URL . 'plugin/opz_nav?url=' . base64_encode(_opz($id)['opz_url']);
 }
 
 /**
