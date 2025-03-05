@@ -46,10 +46,12 @@ class OpzNavClass
         echo '<p style="text-align: center;color: #2196F3;line-height: 3;">----网址导航插件----</p>';
         echo '<div class="form-group">';
         echo '<div style="display: flex;justify-content: space-between">
-<label for="opz_url">链接地址：<small class="text-muted">（用于链接型文章）</small></label></div>';
+<label for="opz_url">链接地址：<small class="text-muted">（用于链接型文章）</small></label><span>点击量: ' . $views . '</span></div>';
         echo "<input type='text' name='opz_url' id='opz_url' class='form-control' value='{$opz_url}' placeholder='http(s)://'>";
-        echo "<p style='font-size: 12px;margin-top: 5px;'>访问次数: {$views}</p>";
-        echo "<p style='margin-top: 5px;display: flex;justify-content: space-between;'>" . '<span class="btn btn-primary" id="get-link-info-btn">获取标题/ico</span>' . "</p>";
+        echo "<p style='font-size: 12px;margin-top: 5px;'>Tips: 获取标题+ico功能受网络限制，可能不成功</p>";
+        echo "<p style='margin-top: 5px;display: flex;justify-content: space-between;'>" . '<span class="btn btn-primary" id="get-link-info-btn">获取标题+ico</span>';
+        echo '<span class="btn btn-light" id="visit-link-btn">访问该链接 ></span>';
+        echo "</p>";
         echo '</div>';
         echo '</div>';
     }
@@ -136,6 +138,10 @@ class OpzNavClass
                 'opz_url' => $data['opz_url'],
                 'views' => $data['views'] + 1
             ]);
+
+            // 浏览量+1
+            $logModel = new Log_Model();
+            $logModel->updateViewCount($res['gid']);
         }
     }
 

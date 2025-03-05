@@ -73,4 +73,13 @@ $(function () {
             }
         })
     })
+
+    $('#visit-link-btn').click(function (e) {
+        var url = $('#opz_url').val();
+        if (url.slice(0, 4) !== 'http') {
+            cocoMessage.error('必须是http开头')
+            return false
+        }
+        window.open(url, '_blank')
+    })
 });

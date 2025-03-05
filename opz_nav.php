@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: 网址导航插件
-Version: 1.2.2
+Version: v1.3.1
 Plugin URL:https://www.emlog.net/plugin/detail/614
 Description: 提供录入网址、获取网址ico、跳转过渡页面等功能，具体可见商店介绍页面
 Author: 子恒博客
