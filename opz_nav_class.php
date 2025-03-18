@@ -142,6 +142,13 @@ class OpzNavClass
             // 浏览量+1
             $logModel = new Log_Model();
             $logModel->updateViewCount($res['gid']);
+
+            // 记录最近访问
+            $recently_link = isset($_COOKIE['recently_link']) ? json_decode($_COOKIE['recently_link'], true) : array();
+            array_unshift($recently_link, $res['gid']);
+            $recently_link = array_unique($recently_link);
+            $recently_link = array_slice($recently_link, 0, _g('recently_link_count') ?: 8);
+            setcookie('recently_link', json_encode($recently_link), time() + 2592000, '/'); // 有效期一个月
         }
     }
 
